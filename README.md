@@ -15,7 +15,7 @@ This project is a simple real-time chat application with user registration, auth
 
 - Frontend: HTML, CSS, Vanilla JavaScript
 
-- Deployment: Ready for cloud deployment
+
 
 ### 📦 Project Structure
 
