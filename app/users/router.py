@@ -51,7 +51,3 @@ async def logout_user(response: Response):
     response.delete_cookie(key="users_access_token")
     return {'message': 'Session successfully logged out'}
 
-
-@router.get("/chat/", response_class=HTMLResponse, name="chat_page")
-async def get_categories(request: Request):
-    return templates.TemplateResponse("chat.html", {"request": request})

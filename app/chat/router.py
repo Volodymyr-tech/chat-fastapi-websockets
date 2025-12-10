@@ -1,16 +1,22 @@
-from fastapi import APIRouter, Response
-from fastapi.requests import Request
+from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Request, Depends
 from fastapi.responses import HTMLResponse
-from app.exceptions import UserAlreadyExistsException, IncorrectEmailOrPasswordException, PasswordMismatchException
-from app.users.auth import get_password_hash, authenticate_user, create_access_token
-from app.users.crud_users import UserCrud
-from app.users.schemas import SUserRegister, SUserAuth
 from fastapi.templating import Jinja2Templates
+from typing import List, Dict
+from app.chat.crud_chat import MessagesCrud
+from app.chat.schemas import MessageRead, MessageCreate
+from app.users.crud_users import UserCrud
+from app.users.dependencies import get_current_user
+from app.users.models import User
+import asyncio
+import logging
 
-router = APIRouter(tags=['Chat'])
+router = APIRouter(prefix='/chat', tags=['Chat'])
 templates = Jinja2Templates(directory='app/templates')
 
 
-@router.get("/chat/", response_class=HTMLResponse, name="chat_page")
-async def get_categories(request: Request):
-    return templates.TemplateResponse("chat.html", {"request": request})
+# Страница чата
+@router.get("/", response_class=HTMLResponse, summary="Chat Page")
+async def get_chat_page(request: Request, user_data: User = Depends(get_current_user)):
+    users_all = await UserCrud.find_all()
+    return templates.TemplateResponse("chat.html",
+                                      {"request": request, "user": user_data, 'users_all': users_all})

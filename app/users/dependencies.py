@@ -3,7 +3,7 @@ from jose import jwt, JWTError
 from datetime import datetime, timezone
 from app.config import get_auth_data
 from app.exceptions import TokenExpiredException, NoJwtException, NoUserIdException, TokenNoFoundException
-from app.users.dao import UsersDAO
+from app.users.crud_users import UserCrud
 
 
 def get_token(request: Request):
@@ -29,7 +29,7 @@ async def get_current_user(token: str = Depends(get_token)):
     if not user_id:
         raise NoUserIdException
 
-    user = await UsersDAO.find_one_or_none_by_id(int(user_id))
+    user = await UserCrud.find_one_or_none_by_id(int(user_id))
     if not user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='User not found')
     return user
