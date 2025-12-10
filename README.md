@@ -53,7 +53,7 @@ project_root/
 │       └── chat.html        # Chat page
 │
 ├── .env                     # Environment variables
-├── requirements.txt         # Python dependencies
+├── pyproject.toml         # Python dependencies
 └── other project files
 ````
 
